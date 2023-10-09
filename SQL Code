@@ -1,0 +1,119 @@
+-- View entire dataset
+
+SELECT *
+FROM Student.Health;
+
+-- Question 1: How does the average GPA vary across different genders, and is there a significant difference between them?
+-- Find the average GPA for Both genders. Keep in mind that the GPA's are in ranges so you have to convert and split them. 
+
+SELECT Gender,
+  AVG(
+    (CAST(SPLIT(GPA, ' - ')[OFFSET(0)] AS FLOAT64) +
+    CAST(SPLIT(GPA, ' - ')[OFFSET(1)] AS FLOAT64)) / 2
+  ) AS AvgGPA
+FROM Student.Health
+GROUP BY Gender;
+
+-- Question 2: Is there a relationship between students' ages and their GPA? Does age impact academic performance?
+
+SELECT DISTINCT(Age),   
+  AVG(
+    (CAST(SPLIT(GPA, ' - ')[OFFSET(0)] AS FLOAT64) +
+    CAST(SPLIT(GPA, ' - ')[OFFSET(1)] AS FLOAT64)) / 2
+  ) AS AvgGPA
+FROM Student.Health
+WHERE AGE IS NOT NULL
+GROUP BY AGE
+ORDER BY AGE ASC;
+
+-- Question 3: Is there a connection between major and GPA?
+
+SELECT DISTINCT(Major), 
+  AVG(
+    (CAST(SPLIT(GPA, ' - ')[OFFSET(0)] AS FLOAT64) +
+    CAST(SPLIT(GPA, ' - ')[OFFSET(1)] AS FLOAT64)) / 2
+  ) AS AvgGPA
+FROM Student.Health
+WHERE Major IS NOT NULL
+GROUP BY Major
+ORDER BY Major ASC;
+
+-- Question 4: Can we identify any trends in GPA based on the year of study?
+
+SELECT Year_of_Study, 
+  AVG(
+    (CAST(SPLIT(GPA, ' - ')[OFFSET(0)] AS FLOAT64) +
+    CAST(SPLIT(GPA, ' - ')[OFFSET(1)] AS FLOAT64)) / 2
+  ) AS AvgGPA
+FROM Student.Health
+GROUP BY Year_of_Study;
+
+-- Question 5: Are there significant differences in GPA between married and unmarried students? 
+
+SELECT Married, 
+  AVG(
+    (CAST(SPLIT(GPA, ' - ')[OFFSET(0)] AS FLOAT64) +
+    CAST(SPLIT(GPA, ' - ')[OFFSET(1)] AS FLOAT64)) / 2
+  ) AS AvgGPA
+FROM Student.Health
+GROUP BY Married;
+
+-- Question 6: Is there a negative relationship between depression and GPA? (Do this for the rest of the mental health indicators)
+
+SELECT Depression, 
+  AVG(
+    (CAST(SPLIT(GPA, ' - ')[OFFSET(0)] AS FLOAT64) +
+    CAST(SPLIT(GPA, ' - ')[OFFSET(1)] AS FLOAT64)) / 2
+  ) AS AvgGPA
+FROM Student.Health
+GROUP BY Depression;
+
+SELECT Anxiety, 
+  AVG(
+    (CAST(SPLIT(GPA, ' - ')[OFFSET(0)] AS FLOAT64) +
+    CAST(SPLIT(GPA, ' - ')[OFFSET(1)] AS FLOAT64)) / 2
+  ) AS AvgGPA
+FROM Student.Health
+GROUP BY Anxiety;
+
+
+SELECT Panic_attacks, 
+  AVG(
+    (CAST(SPLIT(GPA, ' - ')[OFFSET(0)] AS FLOAT64) +
+    CAST(SPLIT(GPA, ' - ')[OFFSET(1)] AS FLOAT64)) / 2
+  ) AS AvgGPA
+FROM Student.Health
+GROUP BY Panic_attacks;
+
+
+SELECT Treatment, 
+  AVG(
+    (CAST(SPLIT(GPA, ' - ')[OFFSET(0)] AS FLOAT64) +
+    CAST(SPLIT(GPA, ' - ')[OFFSET(1)] AS FLOAT64)) / 2
+  ) AS AvgGPA
+FROM Student.Health
+GROUP BY Treatment;
+
+
+-- Question 7: Can you Identify if there is any relationship between depression, anxiety etc, and GPA?
+-- Find the averages (1 for Yes and 2 for No) for each mental health indicator and contrast them with GPA and Major. 
+
+
+SELECT DISTINCT Major,
+  AVG(
+    (CAST(SPLIT(GPA, ' - ')[OFFSET(0)] AS FLOAT64) +
+    CAST(SPLIT(GPA, ' - ')[OFFSET(1)] AS FLOAT64)) / 2
+  ) AS AvgGPA,
+  AVG(IF(Depression, 1, 0)) AS AvgDepression,
+  AVG(IF(Anxiety, 1, 0)) AS AvgAnxiety,
+  AVG(IF(Panic_attacks, 1, 0)) AS AvgPanicAttacks,
+  AVG(IF(Treatment, 1, 0)) AS AvgTreatment
+FROM Student.Health
+WHERE Major IS NOT NULL
+GROUP BY Major
+ORDER BY Major ASC;
+
+
+
+
+
